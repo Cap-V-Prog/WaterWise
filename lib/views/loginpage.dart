@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage>{
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset('assets/images/logowhite.png'),
-                const SizedBox(height: 40),
+                const SizedBox(height: 50),
                 TextFormField(
                   style: const TextStyle(
                       fontSize: 25,
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage>{
                     hintStyle: TextStyle(color: Color(0xFF5B8ADB)),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 25),
                 TextFormField(
                   style: const TextStyle(
                       fontSize: 25,
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage>{
                   ),
                   obscureText: true,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 70),
                 Container(
                   width: 230,
                   height: 68,
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage>{
                   height: 68,
                   child: ElevatedButton(onPressed: () {},
                     child: const Text(
-                      'Register',
+                      'Registar',
                       style: TextStyle(
                           fontSize: 25,
                           color: Color(0xFF5B8ADB)
