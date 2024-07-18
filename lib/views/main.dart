@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:waterwize/firebase_options.dart';
 import 'package:waterwize/views/loginpage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+/*
 void main() {
+  Firebase.initializeApp(options: FirebaseOptions(
+      apiKey: "AIzaSyA1glFiIXPEjVFwKuc4tc30GMVt_xfhA5E",
+      authDomain: "waterwise-2cba6.firebaseapp.com",
+      projectId: "waterwise-2cba6",
+      storageBucket: "waterwise-2cba6.appspot.com",
+      messagingSenderId: "401094204328",
+      appId: "1:401094204328:web:ac3b0d67da4e0ca3661b9d",
+      measurementId: "G-H1LM8F75TN")
+  );
+  runApp(const MyApp());
+}
+*/
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "401094204328",
+    "project_id": "waterwise-2cba6",
+    "storage_bucket": "waterwise-2cba6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401094204328:android:db8d2377d219a643661b9d",
+        "android_client_info": {
+          "package_name": "com.example.waterwize"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhAv3ovg2AulH91bIWg4YCpCxOnrTiNsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
