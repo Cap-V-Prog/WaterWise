@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'homescreen.dart';
+import 'package:waterwize/views/register_page.dart';
+import 'home_page.dart';
 import 'package:waterwize/widgets/widgets.dart';
 
 class LoginPage extends StatefulWidget {
@@ -36,6 +37,10 @@ class _LoginPageState extends State<LoginPage> {
         title: "Sucesso",
         content: "Login efetuado com sucesso",
       );
+
+      _emailController.clear();
+      _passwordController.clear();
+
       setState(() {
         _isLoggedIn = true;
       });
@@ -94,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset('assets/images/logowhite.png'),
-          const SizedBox(height: 50),
+          const SizedBox(height: 75),
           TextFormField(
             controller: _emailController,
             style: const TextStyle(fontSize: 25, color: Color(0xFF5B8ADB)),
@@ -142,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
             width: 230,
             height: 68,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: _goToRegister,
               child: const Text(
                 'Registar',
                 style: TextStyle(fontSize: 25, color: Color(0xFF5B8ADB)),
@@ -152,6 +157,10 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  void _goToRegister(){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>const RegistrationPage()));
   }
 
   Widget buildTopBar() {

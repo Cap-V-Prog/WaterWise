@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waterwize/firebase_options.dart';
-import 'package:waterwize/views/loginpage.dart';
+import 'package:waterwize/views/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 /*

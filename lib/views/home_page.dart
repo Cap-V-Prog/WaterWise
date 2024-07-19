@@ -10,7 +10,6 @@ class HomeScreen extends StatelessWidget {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Add your home screen content here
       ],
     );
   }
