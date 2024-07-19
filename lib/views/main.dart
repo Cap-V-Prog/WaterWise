@@ -49,10 +49,10 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF5B8ADB)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF5B8ADB)),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)
               )

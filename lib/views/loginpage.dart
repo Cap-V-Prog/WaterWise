@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'homescreen.dart';
+import 'package:waterwize/widgets/widgets.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,10 +13,39 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _isLoggedIn = false;
 
-  void _login() {
-    setState(() {
-      _isLoggedIn = true;
-    });
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      Widgets.showCustomDialog(
+        context,
+        title: "Erro",
+        content: "Por favor, preencha todos os campos.",
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      Widgets.showCustomDialog(
+        context,
+        title: "Sucesso",
+        content: "Login efetuado com sucesso",
+      );
+      setState(() {
+        _isLoggedIn = true;
+      });
+    } on FirebaseAuthException catch (e) {
+      Widgets.showCustomDialog(
+        context,
+        title: "Erro",
+        content: e.message ?? "Ocorreu um erro durante o login.",
+      );
+    }
   }
 
   void _logout() {
@@ -32,13 +63,13 @@ class _LoginPageState extends State<LoginPage> {
           Align(
             alignment: Alignment.topCenter,
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 400),
+              duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOut,
               width: _isLoggedIn ? MediaQuery.of(context).size.width : 480,
               height: _isLoggedIn ? 71 : MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                color: Color(0xFF5B8ADB),
+                color: const Color(0xFF5B8ADB),
               ),
               margin: const EdgeInsets.all(15),
               child: Center(
@@ -65,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
           Image.asset('assets/images/logowhite.png'),
           const SizedBox(height: 50),
           TextFormField(
+            controller: _emailController,
             style: const TextStyle(fontSize: 25, color: Color(0xFF5B8ADB)),
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -74,11 +106,12 @@ class _LoginPageState extends State<LoginPage> {
               fillColor: Colors.white,
               filled: true,
               hintText: "Username",
-              hintStyle: TextStyle(color: Color(0xFF5B8ADB)),
+              hintStyle: const TextStyle(color: Color(0xFF5B8ADB)),
             ),
           ),
           const SizedBox(height: 25),
           TextFormField(
+            controller: _passwordController,
             style: const TextStyle(fontSize: 25, color: Color(0xFF5B8ADB)),
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -88,12 +121,12 @@ class _LoginPageState extends State<LoginPage> {
               fillColor: Colors.white,
               filled: true,
               hintText: "Password",
-              hintStyle: TextStyle(color: Color(0xFF5B8ADB)),
+              hintStyle: const TextStyle(color: Color(0xFF5B8ADB)),
             ),
             obscureText: true,
           ),
           const SizedBox(height: 70),
-          Container(
+          SizedBox(
             width: 230,
             height: 68,
             child: ElevatedButton(
@@ -105,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(height: 25),
-          Container(
+          SizedBox(
             width: 230,
             height: 68,
             child: ElevatedButton(
