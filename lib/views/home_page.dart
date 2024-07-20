@@ -25,8 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: 210, // Desired width of the image
-        height: 600, // Adjusted height to accommodate the button
+        width: 210,
+        height: 600,
         child: ProgressBar(
           progress: _progress,
           onIncreaseProgress: _increaseProgress,
@@ -49,9 +49,9 @@ class ProgressBar extends StatelessWidget {
         // Background SVG image
         SvgPicture.asset(
           'assets/svg/bottle.svg',
-          color: Color(0xFFE5E5E5), // Color of the background image
-          width: double.infinity, // Use the available width
-          height: double.infinity, // Use the available height
+          color: Color(0xFFE5E5E5),
+          width: double.infinity,
+          height: double.infinity,
           fit: BoxFit.contain,
         ),
         // Smoothly animated overlaid color corresponding to the progress
@@ -63,9 +63,9 @@ class ProgressBar extends StatelessWidget {
               clipper: _ProgressClipper(animatedProgress),
               child: SvgPicture.asset(
                 'assets/svg/bottle.svg',
-                color: Color(0xFF5B8ADB), // Color of the overlaid image
-                width: double.infinity, // Use the available width
-                height: double.infinity, // Use the available height
+                color: Color(0xFF5B8ADB),
+                width: double.infinity,
+                height: double.infinity,
                 fit: BoxFit.contain,
               ),
             );
