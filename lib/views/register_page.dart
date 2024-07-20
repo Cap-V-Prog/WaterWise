@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:waterwize/database.dart';
 import 'package:waterwize/widgets/widgets.dart';
 
 
@@ -17,7 +16,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordRepController = TextEditingController();
-  final Database _db = Database();
 
   Future<void> _registerUser() async
   {

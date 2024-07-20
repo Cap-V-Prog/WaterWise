@@ -32,7 +32,8 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      Widgets.showCustomDialog(
+
+      await Widgets.showCustomDialog(
         context,
         title: "Sucesso",
         content: "Login efetuado com sucesso",
