@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:waterwize/views/register_page.dart';
 import 'home_page.dart';
 import 'package:waterwize/widgets/widgets.dart';
+import 'options_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -165,11 +166,28 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildTopBar() {
-    return Center(
-      child: ElevatedButton(
-        onPressed: _logout,
-        child: const Text('Voltar'),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          onPressed: _logout,
+          child: const Text('Voltar'),
+        ),
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: _showOptionsDialog,
+        ),
+      ],
     );
   }
+
+  void _showOptionsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return OptionsDialog();
+      },
+    );
+  }
+
 }

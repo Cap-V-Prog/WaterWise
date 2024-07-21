@@ -50,7 +50,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           Widgets.showCustomDialog(
               context,
               title: "Erro de autenticação",
-              content: "Ocorreu um erro durante o registo"
+              content: e.message ??"Ocorreu um erro durante o registo"
           );
         }
       }
