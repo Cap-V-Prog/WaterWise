@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:waterwize/views/register_page.dart';
-import 'home_page.dart';
-import 'package:waterwize/widgets/widgets.dart';
 
 class OptionsDialog extends StatefulWidget {
   @override
@@ -54,32 +51,40 @@ class _OptionsDialogState extends State<OptionsDialog> {
         'progress': newProgress,
       }, SetOptions(merge: true));
 
-      // Call a function to update the UI in the HomeScreen
-      Navigator.of(context).pop(newGoal);
+      Navigator.of(context).pop(); // Close the dialog after saving
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Set Daily Goal'),
+      title: const Text('Definir o objetivo diário',style: TextStyle(color: Color(0xFF5B8ADB)),),
       content: TextField(
         controller: _goalController,
         keyboardType: TextInputType.number,
-        decoration: const InputDecoration(hintText: "Enter daily goal in liters"),
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide.none,
+          ),
+          fillColor: Color(0xFF5B8ADB),
+          filled: true,
+          hintText: "Objetivo diário em (L)",
+          hintStyle: const TextStyle(color: Colors.white),
+        ),
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: const Text('Cancelar',style: TextStyle(color: Colors.red),),
         ),
         TextButton(
           onPressed: () async {
             await _saveDailyGoal();
           },
-          child: const Text('Save'),
+          child: const Text('Guardar'),
         ),
       ],
     );

@@ -4,6 +4,7 @@ import 'package:waterwize/views/register_page.dart';
 import 'home_page.dart';
 import 'package:waterwize/widgets/widgets.dart';
 import 'options_dialog.dart';
+import 'calendar_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -166,18 +167,36 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildTopBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ElevatedButton(
-          onPressed: _logout,
-          child: const Text('Voltar'),
-        ),
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: _showOptionsDialog,
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.all(15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: _logout,
+            child: const Text('Sair',style: TextStyle(fontSize: 17,color: Colors.white),),
+          ),
+          IconButton(
+            icon: const Icon(Icons.calendar_month),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CalendarScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            color: Colors.white,
+            onPressed: _showOptionsDialog,
+          ),
+        ],
+      ),
     );
   }
 

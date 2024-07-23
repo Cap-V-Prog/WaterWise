@@ -15,82 +15,40 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double _progress = 0; // Initially 0% progress
-  double _dailyGoal = 3.0; // Default daily goal
-  DateTime? _lastUpdatedDate;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   @override
   void initState() {
     super.initState();
-    _loadProgress();
-    _loadDailyGoal();
   }
 
-  Future<void> _loadProgress() async {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        final doc = await _firestore.collection('users').doc(user.uid).get();
-        if (doc.exists) {
-          final data = doc.data();
-          if (data != null) {
-            final lastUpdatedTimestamp = data['lastUpdated'] as Timestamp?;
-            final lastUpdatedDate = lastUpdatedTimestamp?.toDate();
-            if (lastUpdatedDate != null && !_isSameDay(lastUpdatedDate, DateTime.now())) {
-              setState(() {
-                _progress = 0;
-              });
-            } else {
-              setState(() {
-                _progress = data['progress'] ?? 0;
-              });
-            }
-            _lastUpdatedDate = lastUpdatedDate;
-          }
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
         }
-      }
-    } catch (e) {
-      // Handle any errors here
-    }
-  }
 
-  Future<void> _loadDailyGoal() async {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        final doc = await _firestore.collection('users').doc(user.uid).get();
-        if (doc.exists) {
-          final data = doc.data();
-          if (data != null) {
-            setState(() {
-              _dailyGoal = data['dailyGoal'] ?? 3.0;
-            });
-          }
-        }
-      }
-    } catch (e) {
-      // Handle any errors here
-    }
-  }
+        final data = snapshot.data!.data() as Map<String, dynamic>;
+        final double progress = data['progress'] ?? 0.0;
+        final double dailyGoal = data['dailyGoal'] ?? 3.0;
 
-  bool _isSameDay(DateTime date1, DateTime date2) {
-    return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
-  }
-
-  Future<void> _increaseProgress(double amount) async {
-    setState(() {
-      _progress = min(1.0, _progress + amount / _dailyGoal); // Adjust based on daily goal
-    });
-
-    final user = _auth.currentUser;
-    if (user != null) {
-      await _firestore.collection('users').doc(user.uid).set({
-        'progress': _progress,
-        'lastUpdated': Timestamp.fromDate(DateTime.now()),
-      }, SetOptions(merge: true));
-    }
+        return Center(
+          child: SizedBox(
+            width: 210,
+            height: 600,
+            child: ProgressBar(
+              progress: progress,
+              dailyGoal: dailyGoal,
+              onShowAddWaterDialog: _showAddWaterDialog,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _showAddWaterDialog() {
@@ -104,19 +62,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: 210,
-        height: 600,
-        child: ProgressBar(
-          progress: _progress,
-          dailyGoal: _dailyGoal,
-          onShowAddWaterDialog: _showAddWaterDialog,
-        ),
-      ),
-    );
+  Future<void> _increaseProgress(double amount) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      if (doc.exists) {
+        final data = doc.data()!;
+        final double currentProgress = data['progress'] ?? 0.0;
+        final double dailyGoal = data['dailyGoal'] ?? 3.0;
+        final double newProgress = min(1.0, currentProgress + amount / dailyGoal);
+
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'progress': newProgress,
+          'lastUpdated': Timestamp.fromDate(DateTime.now()),
+        }, SetOptions(merge: true));
+      }
+    }
   }
 }
 
@@ -246,21 +207,26 @@ class _AddWaterDialogState extends State<AddWaterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Adicionar Água'),
+      title: const Text('Adicionar Água',style: TextStyle(color: Color(0xFF5B8ADB)),),
       content: SizedBox(
         width: 300,
         height: 230,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF5B8ADB),
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () {
-                  widget.onIncreaseProgress(0.1);
+                  widget.onIncreaseProgress(0.22);
                   Navigator.of(context).pop();
                 },
-                child: const Text('100 ml'),
+                child: const Text('220 ml'),
               ),
             ),
             const SizedBox(height: 8),
@@ -268,18 +234,10 @@ class _AddWaterDialogState extends State<AddWaterDialog> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  widget.onIncreaseProgress(0.2);
-                  Navigator.of(context).pop();
-                },
-                child: const Text('200 ml'),
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF5B8ADB),
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () {
                   widget.onIncreaseProgress(0.5);
                   Navigator.of(context).pop();
@@ -292,33 +250,42 @@ class _AddWaterDialogState extends State<AddWaterDialog> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF5B8ADB),
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text('Quantidade Personalizada'),
+                        title: const Text('Quantidade Personalizada',style: TextStyle(color: Color(0xFF5B8ADB)),),
                         content: SizedBox(
                           width: 300, // Set the fixed width for the dialog
-                          height: 120,
+                          height: 200,
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text('Selecione a quantidade (L)'),
-                              StatefulBuilder(
-                                builder: (BuildContext context, StateSetter setState) {
-                                  return Slider(
-                                    value: customAmount,
-                                    min: 0,
-                                    max: 5,
-                                    divisions: 100,
-                                    label: '${customAmount.toStringAsFixed(2)}L',
-                                    onChanged: (double value) {
-                                      setState(() {
-                                        customAmount = value;
-                                      });
-                                    },
-                                  );
+                              const Text('Insira a quantidade (L)',style: TextStyle(fontSize: 20,color: Color(0xFF5B8ADB)),),
+                              Container(height: 10,),
+                              TextFormField(
+                                keyboardType: TextInputType.number,
+                                style: const TextStyle(fontSize: 15, color: Colors.white),
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  fillColor: Color(0xFF5B8ADB),
+                                  filled: true,
+                                  hintText: "Quantidade em Litros",
+                                  hintStyle: const TextStyle(color: Colors.white),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    customAmount = double.tryParse(value) ?? 0.0;
+                                  });
                                 },
                               ),
                             ],
@@ -331,7 +298,7 @@ class _AddWaterDialogState extends State<AddWaterDialog> {
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             },
-                            child: const Text('Add'),
+                            child: const Text('Adicionar',),
                           ),
                         ],
                       );
@@ -349,7 +316,7 @@ class _AddWaterDialogState extends State<AddWaterDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: const Text('Cancel',style: TextStyle(color: Colors.red)),
         ),
       ],
     );
