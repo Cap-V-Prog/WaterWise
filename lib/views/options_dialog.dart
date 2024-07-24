@@ -224,7 +224,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancelar', style: TextStyle(color: Colors.red),),
+              child: const Text('Cancelar', style: TextStyle(color: Colors.white),),
             ),
             TextButton(
               onPressed: () async {
